@@ -7,7 +7,6 @@ class Question(models.Model):
     pub_date = models.DateTimeField('date published')
 
     def __str__(self):
-        self.objects.filter(question_text__startswith='')
         return self.question_text
 
 
