@@ -1,25 +1,17 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.template import loader
 
 from polls.models import Question
 
 
 def index(request):
-    # Understand the Request
-
-    # Process/Perform action of the Request
     latest_question_list = Question.objects.order_by()[:5]
 
-    # Make appropriate response for the Request
-    template = loader.get_template('polls/index.html')
-
-    # Things we need to inflate index.html
     context = {
         'latest_question_list': latest_question_list,
     }
 
-    return HttpResponse(template.render(context, request))
+    return render(request, 'polls/index.html', context)
 
 
 def detail(request, question_id):
