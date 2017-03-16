@@ -1,30 +1,26 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
+from django.views import generic
 
 from polls.models import Question
 
 
-def index(request):
-    latest_question_list = Question.objects.order_by()[:5]
+class IndexView(generic.ListView):
+    template_name = 'polls/index.html'
+    context_object_name = 'latest_question_list'
 
-    context = {
-        'latest_question_list': latest_question_list,
-    }
-
-    return render(request, 'polls/index.html', context)
+    def get_queryset(self):
+        return Question.objects.order_by('-pub_date')[:5]
 
 
-def detail(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-
-    context = {'question': question}
-
-    return render(request, 'polls/detail.html', context)
+class DetailsView(generic.DetailView):
+    model = Question
+    template_name = 'polls/detail.html'
 
 
-def results(request, question_id):
-    response = "You're looking at the results of question %(question_id)s" % locals()
-    return HttpResponse(response)
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = 'polls/results.html'
 
 
 def vote(request, question_id):
